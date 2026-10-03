@@ -1,0 +1,10 @@
+# torch is NOT listed: install the CUDA build for your GPU first (see README).
+accelerate>=0.27.2
+datasets>=2.14.6
+einops>=0.6.1
+numpy>=1.24
+pyyaml>=6.0
+tqdm>=4.66
+rouge-score>=0.1.2
+rouge>=1.0.1
+fuzzywuzzy>=0.18.0

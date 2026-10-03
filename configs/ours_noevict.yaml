@@ -1,0 +1,46 @@
+# R2 ours without eviction: 4-bit cache, value-aware selection a*||v-o||.
+name: ours_noevict
+engine: bitsieve
+semantic: A
+backend: triton
+async_selector: false
+max_cache_tokens: 32768
+compact_dtype: bfloat16
+compact_format: bf16
+collect_diagnostics: false
+profile_layers: false
+dense_kernel_variant: blocked
+selector_kernel_variant: blocked
+selector_logits_dtype: float16
+validate_attention_masks: false
+quant:
+  k_bits: 16
+  v_bits: 16
+  key_token_group: 32
+  value_channel_group: 32
+  residual_tokens: 0
+  param_dtype: float16
+selector:
+  mode: all
+  uniform_queries: 32
+  topk: 64
+  topk_percent: 5.0
+  topk_floor: 256
+  domain: prefix
+  score: softmax
+  dense_prefix_layers: 2
+  sort_indices: true
+  value_aware: true
+  value_center: attn
+generation:
+  block_size: 32
+  small_block_size: 8
+  threshold: 0.95
+  max_new_tokens: 512
+  use_block_cache: true
+  schedule: threshold
+  fixed_steps_per_block: 20
+  loop_stop: true
+eviction:
+  # no eviction; long prompts are prefilled in chunks of 512 (fast path), as in every config
+  prefill_chunk: 512

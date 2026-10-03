@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "maskahead"
+version = "0.2.0"
+description = "Mask-guided KV cache selection and eviction for block diffusion language models"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10,<3.13"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

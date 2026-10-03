@@ -1,0 +1,22 @@
+# Experiment output and local environments
+results/
+results_*/
+numbers/
+tasks/*.txt
+tasks/*.lock
+tasks/*.failed
+tasks/*.tmp
+envs/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+*.whl
+.DS_Store
+.pytest_cache/
+.env
+*.log
+*.tar.gz
+*.zip

@@ -1,0 +1,58 @@
+# E4 CAOTE-like eviction (H2O+CAOTE): EMA mass x ||v - c||. C = max(10% of tokens seen, 128), W = 64 newest kept, 4 sinks, evict every 4 blocks, chunked prefill 512.
+name: caote
+engine: bitsieve
+semantic: A
+backend: triton
+async_selector: false
+max_cache_tokens: 32768
+compact_dtype: bfloat16
+compact_format: bf16
+collect_diagnostics: false
+profile_layers: false
+dense_kernel_variant: blocked
+selector_kernel_variant: blocked
+selector_logits_dtype: float16
+validate_attention_masks: false
+quant:
+  k_bits: 16
+  v_bits: 16
+  key_token_group: 32
+  value_channel_group: 32
+  residual_tokens: 0
+  param_dtype: float16
+selector:
+  mode: all
+  uniform_queries: 32
+  topk: 64
+  topk_percent: 5.0
+  topk_floor: 256
+  domain: prefix
+  score: softmax
+  dense_prefix_layers: 2
+  sort_indices: true
+  value_aware: true
+  value_center: attn
+generation:
+  block_size: 32
+  small_block_size: 8
+  threshold: 0.95
+  max_new_tokens: 512
+  use_block_cache: true
+  schedule: threshold
+  fixed_steps_per_block: 20
+  loop_stop: true
+eviction:
+  policy: ema_recent_value
+  decay: 1.0          # H2O: accumulated attention (sum over queries)
+  recent_window: 64
+  capacity_percent: 10.0
+  capacity_floor: 512
+  interval_blocks: 4
+  prefill_chunk: 512
+  prefill_capacity_percent: 100
+  compaction: lazy        # physical compaction; key groups kept bit-exactly while fully live
+  repack_below: 1.0
+  stage_bf16: none
+  sink_tokens: 4
+  value_center: attn
+  value_caote: true    # CAOTE: h/(1-h) * ||v - o||, h = H2O score normalised to sum 1

@@ -1,0 +1,57 @@
+name: snapkv
+engine: bitsieve
+semantic: A
+backend: triton
+async_selector: false
+max_cache_tokens: 32768
+compact_dtype: bfloat16
+compact_format: bf16
+collect_diagnostics: false
+profile_layers: false
+dense_kernel_variant: blocked
+selector_kernel_variant: blocked
+selector_logits_dtype: float16
+validate_attention_masks: false
+quant:
+  k_bits: 16
+  v_bits: 16
+  key_token_group: 32
+  value_channel_group: 32
+  residual_tokens: 0
+  param_dtype: float16
+selector:
+  mode: all
+  uniform_queries: 32
+  topk: 64
+  topk_percent: 5.0
+  topk_floor: 256
+  domain: prefix
+  score: softmax
+  dense_prefix_layers: 2
+  sort_indices: true
+  value_aware: true
+  value_center: attn
+generation:
+  block_size: 32
+  small_block_size: 8
+  threshold: 0.95
+  max_new_tokens: 512
+  use_block_cache: true
+  schedule: threshold
+  fixed_steps_per_block: 20
+  loop_stop: true
+eviction:
+  policy: snapkv
+  decay: 0.9
+  recent_window: 64
+  capacity_percent: 10.0
+  capacity_floor: 512
+  interval_blocks: 4
+  prefill_chunk: 512
+  prefill_capacity_percent: 100
+  compaction: lazy
+  repack_below: 1.0
+  stage_bf16: none
+  snapkv_window: 32
+  snapkv_pool_kernel: 5
+  sink_tokens: 4
