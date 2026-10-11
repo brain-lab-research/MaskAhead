@@ -1,5 +1,7 @@
 # MaskAhead
 
+[![arXiv 2610.06996](https://img.shields.io/badge/arXiv-2610.06996-b31b1b.svg)](https://arxiv.org/abs/2610.06996)
+
 MaskAhead reduces the KV cache used by block diffusion language models. It uses queries from the current masked block to choose cache entries for attention, then probes upcoming blocks to decide which entries to keep. This repository contains the `maskahead` Python package and small tests for Fast-dLLM v2 7B and DreamReasoner-8B. Model weights are not included.
 
 ## How it works
